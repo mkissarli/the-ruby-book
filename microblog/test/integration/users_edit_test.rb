@@ -23,7 +23,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     log_in_as @user
     assert_redirected_to edit_user_url(@user)
     log_in_as @user
-    assert_redirected_to root_path
+    assert_redirected_to user_url(@user)
     
     name = "Foo Bar"
     email = "foo@bar.com"
