@@ -49,6 +49,6 @@ module SessionsHelper
 
   # Store a url for later redirects
   def store_location
-    session[:forwarding_url] = request.orginal_url if request.get?
+    session[:forwarding_url] = request.original_url if request.get?
   end
 end
