@@ -4,14 +4,19 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
   def setup
     @admin = users(:michael)
     @non_admin = users(:archer)
+    @not_activatied = users(:malory)
   end
 
-  test "index as admin includes pagination and delete links" do
+  test "index as admin includes pagination and delete links and only shows activated accounts" do
     log_in_as @admin
     get users_path
     assert_template 'users/index'
     assert_select 'div.pagination', count: 2
-    first_page_of_users = User.paginate(page: 1)
+
+    # checks if an unactivated acount exists
+    assert_select 'a',  text: users(:malory).name, count: 0
+    
+    first_page_of_users = User.where(activated: true).paginate(page: 1)
     first_page_of_users.each do |user|
       assert_select 'a[href=?]', user_path(user), text: user.name
       unless user == @admin

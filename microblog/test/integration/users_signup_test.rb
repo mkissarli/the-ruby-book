@@ -41,19 +41,19 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     # Try to log in before activation
     log_in_as(user)
     assert_not is_logged_in?
-    assert_template root_url
 
     # Invalid activation token
     get edit_account_activation_path("invalid token", email: user.email)
     assert_not is_logged_in?
-    assert_template root_url
 
     # Valid token, wrong email
     get edit_account_activation_path(user.activation_token, email: "no")
-    assert_not is logged_in?
+    assert_not is_logged_in?
 
     # Correct
-    get edit_account_activation_path(iser.activation_token, email: user.email)
+    get edit_account_activation_path(user.activation_token, email: user.email)
+    assert is_logged_in?
+    
     assert user.reload.activated?
     follow_redirect!
     assert_template 'users/show'
